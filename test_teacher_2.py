@@ -1,4 +1,5 @@
 import time
+
 import pytest
 from sqlalchemy import Column, Integer, String, create_engine, text
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -17,7 +18,8 @@ class Teacher(Base):
 @pytest.fixture(scope="function")
 def db_session():
     engine = create_engine(
-        "postgresql://postgres:admin123@localhost:5432/postgres")
+        "postgresql://postgres:admin123@localhost:5432/postgres"
+    )
     connection = engine.connect()
     transaction = connection.begin()
     Session = sessionmaker(bind=connection)
@@ -117,7 +119,8 @@ def test_data_not_persisted(db_session):
 
 def test_final_verification():
     engine = create_engine(
-        "postgresql://postgres:admin123@localhost:5432/postgres")
+        "postgresql://postgres:admin123@localhost:5432/postgres"
+    )
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -135,14 +138,19 @@ def test_modern_select_methods(db_session):
     count_with_group = result.scalar()
     assert count_with_group >= 0
 
-    teachers = db_session.query(
-        Teacher).where(Teacher.group_id.isnot(None)).limit(3).all()
+    teachers = (
+        db_session.query(Teacher)
+        .where(Teacher.group_id.isnot(None))
+        .limit(3)
+        .all()
+    )
     assert len(teachers) <= 3
 
 
 if __name__ == "__main__":
     engine = create_engine(
-        "postgresql://postgres:admin123@localhost:5432/postgres")
+        "postgresql://postgres:admin123@localhost:5432/postgres"
+    )
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -163,5 +171,5 @@ if __name__ == "__main__":
 
     found_after = session.get(Teacher, test_id)
     assert found_after is None
-    session.close()
 
+    session.close()
