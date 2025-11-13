@@ -164,4 +164,3 @@ if __name__ == "__main__":
     found_after = session.get(Teacher, test_id)
     assert found_after is None
     session.close()
-
